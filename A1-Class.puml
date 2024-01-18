@@ -240,6 +240,7 @@ interface MobileApp {
   + openMobileApp(): void
   + proceedWithMobileApp(): void
   + payWithWallet(): void
+  + showDocumentations(): void
 }
 
 interface SalaryDeduction {
