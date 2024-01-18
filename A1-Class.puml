@@ -214,7 +214,7 @@ class Trip{
     + updateVehicle(): boolean
 }
 
-class Wallet{
+class Wallet implements SalaryDeduction, FeeDeduction , UPIApp{
     - walletID : String
     - walletBalance : double
     - walletTransactions : ArrayList<Transaction>
@@ -233,11 +233,32 @@ class Wallet{
     + updateWallet() : boolean
 }
 
+interface UPIApp {
+  + openUPIApp(): void
+  + proceedWithUPI(): void
+}
+
+interface MobileApp {
+  + openMobileApp(): void
+  + proceedWithMobileApp(): void
+  + payWithWallet(): void
+}
+
+interface SalaryDeduction {
+  + deductFromSalary(): void
+}
+
+interface FeeDeduction {
+  + addToFees(): void
+}
+
 User " 1 "--|{ Transaction: Initiates
 User --|{ Trip: Performs
 Vehicle --|{ Trip
 Vehicle --o DockingStation: DockedAt
 Transaction --o{ Vehicle: transactionFor
+
+
 
 
 

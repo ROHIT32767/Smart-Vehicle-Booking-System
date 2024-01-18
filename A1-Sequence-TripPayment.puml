@@ -1,0 +1,107 @@
+@startuml
+
+actor User
+participant MobileApp
+participant Wallet
+participant UPIApp
+participant SalaryDeduction
+participant FeeDeduction
+participant Vehicle
+participant DockingStation
+participant Trip
+
+User -> MobileApp: Open App
+activate MobileApp
+
+User -> MobileApp: Login
+activate MobileApp
+
+MobileApp -> User: Provide options
+User -> MobileApp: Start Trip
+activate Vehicle
+activate DockingStation
+activate Trip
+
+MobileApp -> Vehicle: Scan QR Code
+Vehicle -> DockingStation: Check Availability
+activate DockingStation
+DockingStation --> Vehicle: Available
+
+Vehicle -> MobileApp: Confirm Reservation
+MobileApp -> Vehicle: Get Vehicle Details
+Vehicle --> MobileApp: Vehicle Details
+
+MobileApp -> Wallet: Check Wallet Balance
+Wallet --> MobileApp: Balance
+
+MobileApp -> Wallet: Auto Deduct Enabled?
+Wallet --> MobileApp: Yes/No
+
+alt Auto Deduct Enabled
+  MobileApp -> Wallet: Auto Deduct Amount
+  Wallet --> MobileApp: Deducted Successfully
+else Manual Payment
+  MobileApp -> Wallet: Manual Payment
+  alt Sufficient Balance
+    Wallet --> MobileApp: Deducted Successfully
+  else Insufficient Balance
+    MobileApp -> Wallet: Insufficient Balance
+    Wallet --> MobileApp: Display Add Money Options
+    opt UPI App
+      MobileApp -> UPIApp: Open UPI App
+      UPIApp --> MobileApp: Proceed with UPI
+    end
+    opt Salary Deduction
+      MobileApp -> SalaryDeduction: Deduct from Salary
+      SalaryDeduction --> MobileApp: Deducted Successfully
+    end
+    opt Fee Deduction
+      MobileApp -> FeeDeduction: Add to Fees
+      FeeDeduction --> MobileApp: Added Successfully
+    end
+  end
+end
+
+MobileApp -> Vehicle: Start Trip
+Vehicle --> MobileApp: Trip Started
+
+MobileApp -> DockingStation: Update Docking Status
+DockingStation --> Vehicle: Docked
+
+MobileApp -> Trip: Record Trip Start
+Trip --> MobileApp: Trip ID
+
+deactivate Vehicle
+deactivate DockingStation
+deactivate Trip
+
+User -> MobileApp: End Trip
+activate Vehicle
+activate DockingStation
+activate Trip
+
+MobileApp -> Vehicle: Scan QR Code
+Vehicle -> DockingStation: Check Validity
+activate DockingStation
+DockingStation --> Vehicle: Valid
+
+Vehicle -> MobileApp: Confirm End Trip
+MobileApp -> Vehicle: Get Trip Details
+Vehicle --> MobileApp: Trip Details
+
+MobileApp -> Vehicle: End Trip
+Vehicle --> MobileApp: Trip Ended
+
+MobileApp -> DockingStation: Update Docking Status
+DockingStation --> Vehicle: Undocked
+
+MobileApp -> Trip: Record Trip End
+Trip --> MobileApp: Trip Details
+
+deactivate Vehicle
+deactivate DockingStation
+deactivate Trip
+
+deactivate Wallet
+deactivate MobileApp
+@enduml
