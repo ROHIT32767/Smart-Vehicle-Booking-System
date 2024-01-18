@@ -38,64 +38,133 @@
 
 ' Now write code to draw a class diagram for the above problem statement with various classes liker User from which student , Staff and Teachers inherit , also include Vehicle class from which bike , moped , bicycle inherit , also include classes like transaction , docking station , trip . You can make suitable assumptions wherever required
 @startuml
-class User {
-    -name: String
-    -email: String
-    -password: String
-    -phone: String
-    -wallet: Wallet
-    -id: String
-    -history: List<Trip>
-    +getName(): String
-    +getEmail(): String
-    +getPassword(): String
-    +getPhone(): String
-    +getWallet(): Wallet
-    +getId(): String
-    +getHistory(): List<Trip>
-    +setName(name: String): void
-    +setEmail(email: String): void
-    +setPassword(password: String): void
-    +setPhone(phone: String): void
-    +setWallet(wallet: Wallet): void
-    +setId(id: String): void
-    +setHistory(history: List<Trip>): void
-    +addTrip(trip: Trip): void
-    +removeTrip(trip: Trip): void
-    +addMoney(amount: Double): void
-    +deductMoney(amount: Double): void
-    +addId(id: String): void
-    +removeId(id: String): void
-    +addVehicle(vehicle: Vehicle): void
-    +removeVehicle(vehicle: Vehicle): void
-    +addPaymentMethod(paymentMethod: PaymentMethod): void
-    +removePaymentMethod(paymentMethod: PaymentMethod): void
-    +addFeedback(feedback: Feedback): void
-    +removeFeedback(feedback: Feedback): void
-    +addRating(rating: Rating): void
-    +removeRating(rating: Rating): void
-    +addSupport(support: Support): void
-    +removeSupport(support: Support): void
-    +addParkingLot(parkingLot: ParkingLot): void
-    +removeParkingLot(parkingLot: ParkingLot): void
-    +addTrip(trip: Trip): void
-    +removeTrip(trip: Trip): void
-    +addVehicle(vehicle: Vehicle): void
-    +removeVehicle(vehicle: Vehicle): void
-    +addPaymentMethod(paymentMethod: PaymentMethod): void
-    +removePaymentMethod(paymentMethod: PaymentMethod): void
-    +addFeedback(feedback: Feedback): void
-    +removeFeedback(feedback: Feedback): void
-    +addRating(rating: Rating): void
-    +removeRating(rating: Rating): void
-    +addSupport(support: Support): void
-    +removeSupport(support: Support
-    +addParkingLot(parkingLot: ParkingLot): void
-    +removeParkingLot(parkingLot: ParkingLot): void
-    +addTrip(trip: Trip): void
-    +removeTrip(trip: Trip): void
-    +addVehicle(vehicle: Vehicle): void
-    +removeVehicle(vehicle: Vehicle): void
+class User{
+    - userID: String 
+    - userName : String
+    - email : String
+    - password : String
+    - phone : String
+    - age : int
+    - walletBalance: double
+    # verificationID: String
+    - isVerified: boolean
+    - isWalletEnabled: boolean
+    - isAutoDeductEnabled: boolean
+    +login() : boolean
+    +verify() : boolean
+    +logout() : boolean
+    +register() : boolean
+    +addMoney() : boolean
+    +getTripHistory() : ArrayList<Trip>
+    +getWalletBalance() : double
+    +getVerificationID() : String
+    +getIsVerified() : boolean
+    +getIsWalletEnabled() : boolean
+    +getIsAutoDeductEnabled() : boolean
+    +startTrip() : boolean
+    +endTrip() : boolean
+    +setPaymentMethod() : boolean
+    +pay() : boolean
+    +getTransactionHistory() : ArrayList<Transaction>
+}
+class Student extends User{
+    - rollNo : String
+    - year : int
+    - branch : String
+    - deductFromFees : boolean
+    - deductFromWallet : boolean
+    +getRollNo() : String
+    +getYear() : int
+    +getBranch() : String
+    +getDeductFromFees() : boolean
+    +getDeductFromWallet() : boolean
+}
+class Staff extends User{
+    - staffID : String
+    - designation : String
+    - deductFromSalary : boolean
+    - deductFromWallet : boolean
+    +getStaffID() : String
+    +getDesignation() : String
+    +getDeductFromSalary() : boolean
+    +getDeductFromWallet() : boolean
+}
+class Teacher extends User{
+    - teacherID : String
+    - designation : String
+    - deductFromSalary : boolean
+    - deductFromWallet : boolean
+    +getTeacherID() : String
+    +getDesignation() : String
+    +getDeductFromSalary() : boolean
+    +getDeductFromWallet() : boolean
+}
+class Vehicle{
+    -vehicleid
+    -vehicleType
+    -vehicleModel
+    -vehicleColor
+    -vehicleLocation
+    -vehicleStatus
+    -vehicleCondition
+    +getVehicleid()
+    +getVehicleType()
+    +getVehicleModel()
+    +getVehicleColor()
+    +getVehicleLocation()
+    +getVehicleStatus()
+    +getVehicleCondition()
+}
+class Bike{
+    -bikeid
+    -bikeType
+    -bikeModel
+    -bikeColor
+    -bikeLocation
+    -bikeStatus
+    -bikeCondition
+    +getBikeid()
+    +getBikeType()
+    +getBikeModel()
+    +getBikeColor()
+    +getBikeLocation()
+    +getBikeStatus()
+    +getBikeCondition()
+}
+class Moped{
+    -mopedid
+    -mopedType
+    -mopedModel
+    -mopedColor
+    -mopedLocation
+    -mopedStatus
+    -mopedCondition
+    +getMopedid()
+    +getMopedType()
+    +getMopedModel()
+    +getMopedColor()
+    +getMopedLocation()
+    +getMopedStatus()
+    +getMopedCondition()
+}
+class Bicycle{
+    -bicycleid
+    -bicycleType
+    -bicycleModel
+    -bicycleColor
+    -bicycleLocation
+    -bicycleStatus
+    -bicycleCondition
+    +getBicycleid()
+    +getBicycleType()
+    +getBicycleModel()
+    +getBicycleColor()
+    +getBicycleLocation()
+    +getBicycleStatus()
+    +getBicycleCondition()
+}
+
+
 @enduml
 
 
