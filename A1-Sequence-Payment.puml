@@ -1,0 +1,54 @@
+@startuml
+
+actor User
+participant MobileApp
+participant Wallet
+participant UPIApp
+participant SalaryDeduction
+participant FeeDeduction
+
+User -> MobileApp: Open App
+activate MobileApp
+
+User -> MobileApp: Login
+activate MobileApp
+
+MobileApp -> User: Provide options
+User -> MobileApp: Make Payment
+activate Wallet
+
+MobileApp -> Wallet: Check Wallet Balance
+Wallet --> MobileApp: Balance
+
+MobileApp -> Wallet: Auto Deduct Enabled?
+Wallet --> MobileApp: Yes/No
+
+alt Auto Deduct Enabled
+  MobileApp -> Wallet: Auto Deduct Amount
+  Wallet --> MobileApp: Deducted Successfully
+else Manual Payment
+  MobileApp -> Wallet: Manual Payment
+  alt Sufficient Balance
+    Wallet --> MobileApp: Deducted Successfully
+  else Insufficient Balance
+    MobileApp -> Wallet: Insufficient Balance
+    Wallet --> MobileApp: Display Add Money Options
+    opt UPI App
+      MobileApp -> UPIApp: Open UPI App
+      UPIApp --> MobileApp: Proceed with UPI
+    end
+    opt Salary Deduction
+      MobileApp -> SalaryDeduction: Deduct from Salary
+      SalaryDeduction --> MobileApp: Deducted Successfully
+    end
+    opt Fee Deduction
+      MobileApp -> FeeDeduction: Add to Fees
+      FeeDeduction --> MobileApp: Added Successfully
+    end
+  end
+end
+
+deactivate Wallet
+
+deactivate MobileApp
+@enduml

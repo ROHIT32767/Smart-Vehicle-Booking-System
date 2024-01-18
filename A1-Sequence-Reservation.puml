@@ -1,0 +1,55 @@
+@startuml
+
+actor User
+participant MobileApp
+participant Vehicle
+participant DockingStation
+participant Wallet
+participant Transaction
+
+User -> MobileApp: Open App
+activate MobileApp
+
+User -> MobileApp: Login
+activate MobileApp
+
+MobileApp -> User: Provide options
+User -> MobileApp: Reserve Bike
+activate Vehicle
+
+MobileApp -> Vehicle: Check Bike Availability
+Vehicle --> MobileApp: Available/Not Available
+
+alt Bike Available
+  MobileApp -> Vehicle: Confirm Reservation
+  Vehicle --> MobileApp: Reservation Confirmed
+  MobileApp -> Wallet: Check Wallet Balance
+  Wallet --> MobileApp: Balance
+
+  MobileApp -> Wallet: Auto Deduct Enabled?
+  Wallet --> MobileApp: Yes/No
+
+  alt Auto Deduct Enabled
+    MobileApp -> Wallet: Auto Deduct Amount
+    Wallet --> MobileApp: Deducted Successfully
+  else Manual Payment
+    MobileApp -> Wallet: Manual Payment
+    alt Sufficient Balance
+      Wallet --> MobileApp: Deducted Successfully
+    else Insufficient Balance
+      MobileApp -> Wallet: Insufficient Balance
+      Wallet --> MobileApp: Display Add Money Options
+    end
+  end
+
+  MobileApp -> Vehicle: Unlock Bike
+  Vehicle --> MobileApp: Bike Unlocked
+  deactivate Vehicle
+else Bike Not Available
+  MobileApp --> User: Bike Not Available
+end
+
+deactivate Wallet
+
+deactivate MobileApp
+@enduml

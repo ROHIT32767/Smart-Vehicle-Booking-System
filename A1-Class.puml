@@ -45,7 +45,7 @@ class User{
     - password : String
     - phone : String
     - age : int
-    - walletBalance: double
+    - wallet : Wallet
     # verificationID: String
     - isVerified: boolean
     - isWalletEnabled: boolean
@@ -212,6 +212,25 @@ class Trip{
     + endTrip() : boolean
     + calculateTripAmount() : double
     + updateVehicle(): boolean
+}
+
+class Wallet{
+    - walletID : String
+    - walletBalance : double
+    - walletTransactions : ArrayList<Transaction>
+    - walletUser : User
+    + getWalletID() : String
+    + getWalletBalance() : double
+    + getWalletTransactions() : ArrayList<Transaction>
+    + getWalletUser() : User
+    + newWallet() : boolean
+    + updateWallet() : boolean
+    + deleteWallet() : boolean
+    + getWalletBalance() : double
+    + getWalletUser() : User
+    + addMoney() : boolean
+    + deductMoney() : boolean
+    + updateWallet() : boolean
 }
 
 User " 1 "--|{ Transaction: Initiates
