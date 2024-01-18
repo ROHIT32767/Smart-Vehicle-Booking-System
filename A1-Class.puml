@@ -38,18 +38,22 @@
 
 ' Now write code to draw a class diagram for the above problem statement with various classes liker User from which student , Staff and Teachers inherit , also include Vehicle class from which bike , moped , bicycle inherit , also include classes like transaction , docking station , trip . You can make suitable assumptions wherever required
 @startuml
-class User{
-    - userID: String 
+class User implements MobileApp{
+    + userID: String 
     - userName : String
     - email : String
     - password : String
     - phone : String
     - age : int
-    - wallet : Wallet
+    - walletID : String
     # verificationID: String
     - isVerified: boolean
     - isWalletEnabled: boolean
     - isAutoDeductEnabled: boolean
+    - moneyDue: double
+    - currentVehicleID: String
+    - tripHistory : ArrayList<Trip>
+    - transactionHistory : ArrayList<Transaction>
     +login() : boolean
     +verify() : boolean
     +logout() : boolean
@@ -66,62 +70,56 @@ class User{
     +setPaymentMethod() : boolean
     +pay() : boolean
     +getTransactionHistory() : ArrayList<Transaction>
+    +uploadVerificationID() : boolean
 }
 class Student extends User{
-    - rollNo : String
+    + rollNo : String
     - year : int
     - branch : String
     - deductFromFees : boolean
     - deductFromWallet : boolean
-    +getRollNo() : String
     +getYear() : int
     +getBranch() : String
     +getDeductFromFees() : boolean
     +getDeductFromWallet() : boolean
 }
 class Staff extends User{
-    - staffID : String
+    + staffID : String
     - designation : String
     - deductFromSalary : boolean
     - deductFromWallet : boolean
-    +getStaffID() : String
     +getDesignation() : String
     +getDeductFromSalary() : boolean
     +getDeductFromWallet() : boolean
 }
 class Teacher extends User{
-    - teacherID : String
+    + teacherID : String
     - designation : String
     - deductFromSalary : boolean
     - deductFromWallet : boolean
-    +getTeacherID() : String
     +getDesignation() : String
     +getDeductFromSalary() : boolean
     +getDeductFromWallet() : boolean
 }
 
 class Vehicle{
-    -vehicleID : String
+    +vehicleID : String
     -vehicleType : String
     + QRcode : String
     # reservedAt : Date
     # reservedBy : User
-    - DockedAt : DockingStation
     - isReserved : boolean
     - Color: String
     - tyrePressure : double
     - usageHistory : ArrayList<Trip>
-    +getVehicleid() : String
     +getVehicleType() : String
     +getQRcode() : String
     +getReservedAt() : Date
     +getReservedBy() : User
-    +getDockedAt() : DockingStation
     +getIsReserved() : boolean
     +setVehicleStatus() : boolean
     +setReservedAt() : boolean
     +setReservedBy() : boolean
-    +setDockedAt() : boolean
     +scanQRcode() : boolean
     +reserveVehicle() : boolean
     +returnVehicle() : boolean
@@ -142,12 +140,14 @@ class Bicycle extends Vehicle{
 }
 
 class DockingStation{
-    - stationID : String
+    + stationID : String
     - stationName : String
     - stationLocation : String
     - vehiclesDocked : ArrayList<Vehicle>
     - stationUsageHistory : ArrayList<Trip>
-    + getStationID() : String
+    - stationCapacity : int
+    - stationMaintenanceStatus : String
+    - stationSecurityStatus : String
     + getStationName() : String
     + getStationLocation() : Stringn
     + getStationUsageHistory() : ArrayList<Trip>
@@ -158,7 +158,7 @@ class DockingStation{
 }
 
 class Transaction{
-    - transactionID : String
+    + transactionID : String
     - transactionDate : Date
     - transactionAmount : double
     - transactionType : String
@@ -166,7 +166,6 @@ class Transaction{
     - transactionRemarks : String
     - transactionBy : User
     - transactionFor : Vehicle
-    + getTransactionID() : String
     + getTransactionDate() : Date
     + getTransactionAmount() : double
     + getTransactionType() : String
@@ -182,7 +181,7 @@ class Transaction{
 }
 
 class Trip{
-    - tripID : String
+    + tripID : String
     - tripStart : Date
     - tripEnd : Date
     - tripStartLocation : DockingStation
@@ -192,9 +191,10 @@ class Trip{
     - tripTransaction : Transaction
     - tripStatus : String
     - tripRemarks : String
-    - tripBy : User
-    - tripFor : Vehicle
-    + getTripID() : String
+    - tripByUserID : String
+    - tripForVehicleID : String
+    - Rating : int
+    - Feedback : String
     + getTripStart() : Date
     + getTripEnd() : Date
     + getTripStartLocation() : String
@@ -215,14 +215,12 @@ class Trip{
 }
 
 class Wallet implements SalaryDeduction, FeeDeduction , UPIApp{
-    - walletID : String
+    + walletID : String
+    - walletUserID : key
     - walletBalance : double
     - walletTransactions : ArrayList<Transaction>
-    - walletUser : User
-    + getWalletID() : String
     + getWalletBalance() : double
     + getWalletTransactions() : ArrayList<Transaction>
-    + getWalletUser() : User
     + newWallet() : boolean
     + updateWallet() : boolean
     + deleteWallet() : boolean
@@ -252,16 +250,16 @@ interface FeeDeduction {
   + addToFees(): void
 }
 
-User " 1 "--|{ Transaction: Initiates
-User --|{ Trip: Performs
-Vehicle --|{ Trip
-Vehicle --o DockingStation: DockedAt
-Transaction --o{ Vehicle: transactionFor
-
-
-
-
-
+User "1" -- "0..*" Trip : Goes On
+Trip "0..*" -- "1..*" DockingStation : Starts/Ends At
+Vehicle "1" *-- "0..*" Trip : Used In
+Trip "1" o-- "1" Transaction : Associated With
+User "1" -- "0..*" Transaction : Makes >
+DockingStation "0..*" o-- "0..*" Vehicle : Contains
+User "1" -- "1" Wallet : Owns
+Wallet "1" *-- "0..*" Transaction : Initiates
+User "0..*" -- "0..*" Vehicle : Rides
+User "0..*" -- "0..*" DockingStation : Visits
 @enduml
 
 
