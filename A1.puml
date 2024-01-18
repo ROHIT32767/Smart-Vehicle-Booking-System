@@ -99,70 +99,127 @@ class Teacher extends User{
     +getDeductFromSalary() : boolean
     +getDeductFromWallet() : boolean
 }
+
 class Vehicle{
-    -vehicleid
-    -vehicleType
-    -vehicleModel
-    -vehicleColor
-    -vehicleLocation
-    -vehicleStatus
-    -vehicleCondition
-    +getVehicleid()
-    +getVehicleType()
-    +getVehicleModel()
-    +getVehicleColor()
-    +getVehicleLocation()
-    +getVehicleStatus()
-    +getVehicleCondition()
+    -vehicleID : String
+    -vehicleType : String
+    + QRcode : String
+    # reservedAt : Date
+    # reservedBy : User
+    - DockedAt : DockingStation
+    - isReserved : boolean
+    - Color: String
+    - tyrePressure : double
+    - usageHistory : ArrayList<Trip>
+    +getVehicleid() : String
+    +getVehicleType() : String
+    +getQRcode() : String
+    +getReservedAt() : Date
+    +getReservedBy() : User
+    +getDockedAt() : DockingStation
+    +getIsReserved() : boolean
+    +setVehicleStatus() : boolean
+    +setReservedAt() : boolean
+    +setReservedBy() : boolean
+    +setDockedAt() : boolean
+    +scanQRcode() : boolean
+    +reserveVehicle() : boolean
+    +returnVehicle() : boolean
+    +newVehicle() : boolean
+    +getUsageHistory() : ArrayList<Trip>
 }
-class Bike{
-    -bikeid
-    -bikeType
-    -bikeModel
-    -bikeColor
-    -bikeLocation
-    -bikeStatus
-    -bikeCondition
-    +getBikeid()
-    +getBikeType()
-    +getBikeModel()
-    +getBikeColor()
-    +getBikeLocation()
-    +getBikeStatus()
-    +getBikeCondition()
+class Bike extends Vehicle{
+    - fuelStatus : double
+    + getfuelStatus() : double
 }
-class Moped{
-    -mopedid
-    -mopedType
-    -mopedModel
-    -mopedColor
-    -mopedLocation
-    -mopedStatus
-    -mopedCondition
-    +getMopedid()
-    +getMopedType()
-    +getMopedModel()
-    +getMopedColor()
-    +getMopedLocation()
-    +getMopedStatus()
-    +getMopedCondition()
+class Moped extends Vehicle{
+    - batteryPercentage : double
+    + getBatteryPercentage() : double
 }
-class Bicycle{
-    -bicycleid
-    -bicycleType
-    -bicycleModel
-    -bicycleColor
-    -bicycleLocation
-    -bicycleStatus
-    -bicycleCondition
-    +getBicycleid()
-    +getBicycleType()
-    +getBicycleModel()
-    +getBicycleColor()
-    +getBicycleLocation()
-    +getBicycleStatus()
-    +getBicycleCondition()
+class Bicycle extends Vehicle{
+    + basketCapacity : int
+    + getBasketCapacity() : int
 }
+
+class DockingStation{
+    - stationID : String
+    - stationName : String
+    - stationLocation : String
+    - vehiclesDocked : ArrayList<Vehicle>
+    - stationUsageHistory : ArrayList<Trip>
+    + getStationID() : String
+    + getStationName() : String
+    + getStationLocation() : Stringn
+    + getStationUsageHistory() : ArrayList<Trip>
+    + getVehiclesDocked() : ArrayList<Vehicle>
+    + dockVehicle() : boolean
+    + undockVehicle() : boolean
+    + newDockingStation() : boolean
+}
+
+class Transaction{
+    - transactionID : String
+    - transactionDate : Date
+    - transactionAmount : double
+    - transactionType : String
+    - transactionStatus : String
+    - transactionRemarks : String
+    - transactionBy : User
+    - transactionFor : Vehicle
+    + getTransactionID() : String
+    + getTransactionDate() : Date
+    + getTransactionAmount() : double
+    + getTransactionType() : String
+    + getTransactionStatus() : String
+    + getTransactionRemarks() : String
+    + newTransaction() : boolean
+    + updateTransaction() : boolean
+    + deleteTransaction() : boolean
+    + getTransactionBy() : User
+    + getTransactionFor() : Vehicle
+    + makeTransaction() : boolean
+    + updateWallet() : boolean
+}
+
+class Trip{
+    - tripID : String
+    - tripStart : Date
+    - tripEnd : Date
+    - tripStartLocation : DockingStation
+    - tripEndLocation : DockingStation
+    - tripDistance : double
+    - tripAmount : double
+    - tripTransaction : Transaction
+    - tripStatus : String
+    - tripRemarks : String
+    - tripBy : User
+    - tripFor : Vehicle
+    + getTripID() : String
+    + getTripStart() : Date
+    + getTripEnd() : Date
+    + getTripStartLocation() : String
+    + getTripEndLocation() : String
+    + getTripDistance() : double
+    + getTripAmount() : double
+    + getTripStatus() : String
+    + getTripRemarks() : String
+    + newTrip() : boolean
+    + updateTrip() : boolean
+    + deleteTrip() : boolean
+    + getTripBy() : User
+    + getTripFor() : Vehicle
+    + startTrip() : boolean
+    + endTrip() : boolean
+    + calculateTripAmount() : double
+    + updateVehicle(): boolean
+}
+
+User " 1 "--|{ Transaction: Initiates
+User --|{ Trip: Performs
+Vehicle --|{ Trip
+Vehicle --o DockingStation: DockedAt
+Transaction --o{ Vehicle: transactionFor
+
 
 
 @enduml
