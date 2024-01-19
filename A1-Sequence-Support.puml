@@ -1,0 +1,35 @@
+@startuml
+
+actor User
+participant ":MobileApp"
+participant ":Rating"
+participant ":SupportManagement"
+
+User -> ":MobileApp": Open App
+activate ":MobileApp"
+
+User -> ":MobileApp": View History
+":MobileApp" -> User: Display Trip History
+
+User -> ":MobileApp": Provide Feedback
+":MobileApp" -> ":Rating": give Rating()
+":Rating" --> ":MobileApp": Rating Submitted Successfully
+
+User -> ":MobileApp": Access Support
+":MobileApp" -> ":SupportManagement": Raise Ticket
+activate ":SupportManagement"
+":SupportManagement" --> ":MobileApp": Ticket ID: #123\nTicket Raised Successfully
+
+User -> ":MobileApp": View Ticket Status
+":MobileApp" -> ":SupportManagement": Check Ticket Status
+":SupportManagement" --> ":MobileApp": Ticket #123 - Open
+
+User -> ":MobileApp": Update Ticket
+":MobileApp" -> ":SupportManagement": Add Additional Information
+":SupportManagement" --> ":MobileApp": Information Added
+
+User -> ":MobileApp": Close Ticket
+":MobileApp" -> ":SupportManagement": Close Ticket
+":SupportManagement" --> ":MobileApp": Ticket #123 - Closed
+
+@enduml
