@@ -63,11 +63,10 @@ class User{
     +getIsVerified() : boolean
     +getIsWalletEnabled() : boolean
     +getIsAutoDeductEnabled() : boolean
-    +startTrip() : boolean
-    +endTrip() : boolean
     +setPaymentMethod() : boolean
     +pay() : boolean
     +getTransactionHistory() : List<Transaction>
+    +getTripHistory() : List<Trip>
     +uploadVerificationID() : boolean
 }
 class Student extends User{
@@ -203,6 +202,7 @@ class Trip{
     - tripRemarks : String
     - tripByUserID : String
     - tripForVehicleID : String
+    - tripFine : double
     - Rating : Rating
     + getTripStart() : Date
     + getTripEnd() : Date
