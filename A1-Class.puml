@@ -52,12 +52,12 @@ class User{
     - isAutoDeductEnabled: boolean
     - moneyDue: double
     - currentVehicleID: String
-    - tripHistory : ArrayList<Trip>
-    - transactionHistory : ArrayList<Transaction>
+    - tripHistory : List<Trip>
+    - transactionHistory : List<Transaction>
     +verify() : boolean
     +newUser() : boolean
     +addMoney() : boolean
-    +getTripHistory() : ArrayList<Trip>
+    +getTripHistory() : List<Trip>
     +getWalletBalance() : double
     +getVerificationID() : String
     +getIsVerified() : boolean
@@ -67,7 +67,7 @@ class User{
     +endTrip() : boolean
     +setPaymentMethod() : boolean
     +pay() : boolean
-    +getTransactionHistory() : ArrayList<Transaction>
+    +getTransactionHistory() : List<Transaction>
     +uploadVerificationID() : boolean
 }
 class Student extends User{
@@ -109,7 +109,7 @@ class Vehicle{
     - isReserved : boolean
     - Color: String
     - tyrePressure : double
-    - usageHistory : ArrayList<Trip>
+    - usageHistory : List<Trip>
     +getVehicleType() : String
     +getQRcode() : String
     +getReservedAt() : Date
@@ -122,7 +122,7 @@ class Vehicle{
     +reserveVehicle() : boolean
     +returnVehicle() : boolean
     +newVehicle() : boolean
-    +getUsageHistory() : ArrayList<Trip>
+    +getUsageHistory() : List<Trip>
 }
 class Bike extends Vehicle{
     - fuelStatus : double
@@ -150,16 +150,16 @@ class DockingStation implements LocationTracker{
     + stationID : String
     - stationName : String
     - stationLocation : String
-    - vehiclesDocked : ArrayList<Vehicle>
-    - stationUsageHistory : ArrayList<Trip>
+    - vehiclesDocked : List<Vehicle>
+    - stationUsageHistory : List<Trip>
     - VehicleLocations: Map<String, String>
     - stationCapacity : int
     - stationMaintenanceStatus : String
     - stationSecurityStatus : String
     + getStationName() : String
     + getStationLocation() : Stringn
-    + getStationUsageHistory() : ArrayList<Trip>
-    + getVehiclesDocked() : ArrayList<Vehicle>
+    + getStationUsageHistory() : List<Trip>
+    + getVehiclesDocked() : List<Vehicle>
     + dockVehicle() : boolean
     + undockVehicle() : boolean
     + newDockingStation() : boolean
@@ -182,7 +182,6 @@ class Transaction{
     + getTransactionType() : String
     + getTransactionStatus() : String
     + getTransactionRemarks() : String
-    + newTransaction() : boolean
     + updateTransaction() : boolean
     + deleteTransaction() : boolean
     + getTransactionBy() : User
@@ -237,7 +236,7 @@ class Rating {
 class SupportManagement{
     + ticketID : key
     - description : String
-    - tags : ArrayList<String>
+    - tags : List<String>
     - assignedTo : String
     - raisedByUserID: String
     - raiseTicket() : boolean
@@ -252,9 +251,9 @@ class Wallet implements SalaryDeduction, FeeDeduction , UPIApp{
     + walletID : String
     - walletUserID : key
     - walletBalance : double
-    - walletTransactions : ArrayList<Transaction>
+    - walletTransactions : List<Transaction>
     + getWalletBalance() : double
-    + getWalletTransactions() : ArrayList<Transaction>
+    + getWalletTransactions() : List<Transaction>
     + newWallet() : boolean
     + updateWallet() : boolean
     + deleteWallet() : boolean
@@ -297,6 +296,13 @@ class MobileApp implements LocationTracker{
   + reportIssue(): void
 }
 
+class VerificationManager{
+    + verifyUser() : boolean
+    + sendVerificationCode() : boolean
+    + verifyVerificationCode() : boolean
+    + verifyID() : boolean
+}
+
 
 interface SalaryDeduction {
   + deductFromSalary(): void
@@ -306,20 +312,21 @@ interface FeeDeduction {
   + addToFees(): void
 }
 
-User "1" -- "0..*" Trip : Goes On
+User "1" -- "0..*" Trip : Goes On >
 Trip "0..*" o-- "1..*" DockingStation : Starts/Ends At
-Vehicle "1" -- "0..*" Trip : Used In
-Trip "1" o-- "1" Transaction : Associated With
+Vehicle "1" -- "0..*" Trip : Used In >
+Trip "1" o-- "1" Transaction : Associated With >
 User "1" -- "0..*" Transaction : Makes >
 DockingStation "0..*" o-- "0..*" Vehicle : Contains
-User "1" -- "1" Wallet : Owns
+User "1" -- "1" Wallet : Owns >
 Trip "1" *-- "0..1" Rating : has
 User "1" -- "0..*" SupportManagement : Raises
 User "0..*" -- "0..*" MobileApp : Uses
 Wallet "1" *-- "0..*" Transaction : Initiates
-User "0..*" -- "0..*" Vehicle : Rides
-User "0..*" -- "0..*" DockingStation : Visits
-User "1" -- "0..*" Rating : Givesd
+User "0..*" -- "0..*" Vehicle : Rides >
+User "0..*" -- "0..*" DockingStation : Visits >
+User "1" -- "0..*" Rating : Gives >
+VerificationManager "1" -- "0..*" User : Verifies >
 
 @enduml
 

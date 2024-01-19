@@ -1,0 +1,47 @@
+@startuml
+
+actor User
+participant MobileApp
+participant VerificationManager
+participant UserDB
+participant Wallet
+
+User -> MobileApp: Open App
+activate MobileApp
+
+User -> MobileApp: Create Account
+MobileApp -> UserDB: newUser()
+UserDB --> MobileApp: User Created Successfully
+
+User -> MobileApp: Upload ID
+MobileApp -> VerificationManager: sendVerificationCode()
+VerificationManager --> MobileApp: Verification Code Sent
+
+User -> MobileApp: Enter Verification Code
+MobileApp -> VerificationManager: verifyVerificationCode()
+VerificationManager --> MobileApp: Verification Successful
+
+User -> MobileApp: Verify ID
+MobileApp -> VerificationManager: verifyID()
+VerificationManager --> MobileApp: ID Verified
+
+User -> MobileApp: Add Money to Wallet
+MobileApp -> Wallet: addMoney()
+Wallet --> MobileApp: Money Added Successfully
+
+User -> MobileApp: Log In
+MobileApp -> UserDB: login()
+alt Valid Credentials
+    UserDB --> MobileApp: Login Successful
+else Wrong Password
+    UserDB --> MobileApp: Incorrect Password
+    opt Forgot Password?
+        User -> MobileApp: Forgot Password
+        MobileApp -> UserDB: resetPassword()
+        UserDB --> MobileApp: Password Reset Successful
+    end
+end
+
+deactivate MobileApp
+
+@enduml
