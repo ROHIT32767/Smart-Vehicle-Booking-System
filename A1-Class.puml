@@ -38,7 +38,7 @@
 
 ' Now write code to draw a class diagram for the above problem statement with various classes liker User from which student , Staff and Teachers inherit , also include Vehicle class from which bike , moped , bicycle inherit , also include classes like transaction , docking station , trip . You can make suitable assumptions wherever required
 @startuml
-class User implements MobileApp{
+class User{
     + userID: String 
     - userName : String
     - email : String
@@ -54,10 +54,8 @@ class User implements MobileApp{
     - currentVehicleID: String
     - tripHistory : ArrayList<Trip>
     - transactionHistory : ArrayList<Transaction>
-    +login() : boolean
     +verify() : boolean
-    +logout() : boolean
-    +register() : boolean
+    +newUser() : boolean
     +addMoney() : boolean
     +getTripHistory() : ArrayList<Trip>
     +getWalletBalance() : double
@@ -139,12 +137,22 @@ class Bicycle extends Vehicle{
     + getBasketCapacity() : int
 }
 
-class DockingStation{
+interface LocationTracker {
+  + startTracking(): void
+  + stopTracking(): void
+  + getCurrentLocation(): String
+  + setDestination(destination: String): void
+  + getRoute(): List<String>
+  + displayMap(): void
+}
+
+class DockingStation implements LocationTracker{
     + stationID : String
     - stationName : String
     - stationLocation : String
     - vehiclesDocked : ArrayList<Vehicle>
     - stationUsageHistory : ArrayList<Trip>
+    - VehicleLocations: Map<String, String>
     - stationCapacity : int
     - stationMaintenanceStatus : String
     - stationSecurityStatus : String
@@ -155,6 +163,9 @@ class DockingStation{
     + dockVehicle() : boolean
     + undockVehicle() : boolean
     + newDockingStation() : boolean
+    + updateVehicleLocation(VehicleID: String, location: String): void
+    + updateVehicleStatus(VehicleID: String, status: String): void
+    + logData(data: String): void
 }
 
 class Transaction{
@@ -193,8 +204,7 @@ class Trip{
     - tripRemarks : String
     - tripByUserID : String
     - tripForVehicleID : String
-    - Rating : int
-    - Feedback : String
+    - Rating : Rating
     + getTripStart() : Date
     + getTripEnd() : Date
     + getTripStartLocation() : String
@@ -212,6 +222,30 @@ class Trip{
     + endTrip() : boolean
     + calculateTripAmount() : double
     + updateVehicle(): boolean
+}
+
+class Rating {
+    + ratingID : key
+    - Stars : int 
+    - Feedback : String
+    + giveRating() : boolean
+    + giveFeedback() : boolean
+    + updateRating() : boolean
+    + updateFeedback() : boolean
+}
+
+class SupportManagement{
+    + ticketID : key
+    - description : String
+    - tags : ArrayList<String>
+    - assignedTo : String
+    - raisedByUserID: String
+    - raiseTicket() : boolean
+    - closeIssue() : boolean
+    - submitFeedback(): boolean
+    - updateTicket() : boolean
+    - getTicketDetails() : String
+    - getTicketStatus() : String
 }
 
 class Wallet implements SalaryDeduction, FeeDeduction , UPIApp{
@@ -236,12 +270,33 @@ interface UPIApp {
   + proceedWithUPI(): void
 }
 
-interface MobileApp {
+class MobileApp implements LocationTracker{
+  - appVersion: String
+  - deviceOS: String
+  + login(): void
+  + logout(): void
+  + register(): void
   + openMobileApp(): void
   + proceedWithMobileApp(): void
   + payWithWallet(): void
   + showDocumentations(): void
+  + updateProfile(): void
+  + displayFAQs(): void
+  + viewNotifications(): void
+  + accessSupport(): void
+  + checkInbox(): void
+  + setPreferences(): void
+  + planRoute(destination: String): void
+  + viewPromotions(): void
+  + shareTripDetails(): void
+  + rateApp(): void
+  + toggleNotifications(enable: boolean): void
+  + viewHistory(): void
+  + inviteFriends(): void
+  + redeemRewards(): void
+  + reportIssue(): void
 }
+
 
 interface SalaryDeduction {
   + deductFromSalary(): void
@@ -252,15 +307,20 @@ interface FeeDeduction {
 }
 
 User "1" -- "0..*" Trip : Goes On
-Trip "0..*" -- "1..*" DockingStation : Starts/Ends At
-Vehicle "1" *-- "0..*" Trip : Used In
+Trip "0..*" o-- "1..*" DockingStation : Starts/Ends At
+Vehicle "1" -- "0..*" Trip : Used In
 Trip "1" o-- "1" Transaction : Associated With
 User "1" -- "0..*" Transaction : Makes >
 DockingStation "0..*" o-- "0..*" Vehicle : Contains
 User "1" -- "1" Wallet : Owns
+Trip "1" *-- "0..1" Rating : has
+User "1" -- "0..*" SupportManagement : Raises
+User "0..*" -- "0..*" MobileApp : Uses
 Wallet "1" *-- "0..*" Transaction : Initiates
 User "0..*" -- "0..*" Vehicle : Rides
 User "0..*" -- "0..*" DockingStation : Visits
+User "1" -- "0..*" Rating : Givesd
+
 @enduml
 
 
