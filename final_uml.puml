@@ -1,0 +1,331 @@
+@startuml class
+
+interface upiPayment {
+    + makeUpiPayment(amount : double) : void
+}
+
+interface salaryDeduction{
+    + deductFromSalary(amount : double) : void
+}
+
+interface feePayment {
+    + payFromFee(amount : double) : void
+}
+
+class User implements upiPayment {
+    - id : String
+    - email : String
+    - password : String
+    - autoDeductFromWallet : Boolean
+    - wallet : Wallet
+    - tripHistory : List<Trip>
+    - isVerified : Boolean
+    
+    + getId() : String
+    + getEmail() : String
+    + getPassword() : String
+    + getAutoDeductFromWallet() : Boolean
+    + getWallet() : Wallet
+    + getTripHistory() : Array<Trip>
+    + getIsVerified() : Boolean
+
+    + setEmail(email: String) : void
+    + setId(id: String) : void
+    + setPassword(password: String) : void
+    + setAutoDeductFromWallet(autoDeduct: Boolean) : void
+    + setWallet(wallet: Wallet) : void
+    + setTripHistory(tripHistory: Array<Trip>) : void
+    + setIsVerified(isVerified : Boolean) : void
+    
+    + {static} User login(email : String, password)
+    + {static} {abstract} (static, abstract) createAccount()
+    + {abstract} (abstract) void uploadId()
+    # void addMoneyToWallet(amount : Double)
+    + void addTripToHistory(Trip : Trip)
+    + Object getUserDetails()
+}
+
+class Student extends User implements feePayment{
+    - rollNo : String
+    - year : int
+    - branch : String
+    
+    + getRollNo(): String
+    + getYear(): int
+    + getBranch(): String
+
+    + setRollNo(rollNo: String): void
+    + setYear(year: int): void
+    + setBranch(branch: String): void
+}
+
+class Teacher extends User implements salaryDeduction{
+    - department : String
+    - designation : String
+    
+    + getDepartment() : String
+    + getDesignation() : String
+
+    + setDepartment(newDepartment: String): void
+    + setDesignation(newDesignation: String): void
+}
+
+class Staff extends User implements salaryDeduction{
+    - id : String
+    - designation : String
+    
+    + getID(): String
+    + setID(id: String): void
+    + getDesignation(): String
+    + setDesignation(designation: String): void
+}
+
+class Trip {
+    - trip: Trip
+    - user: User
+    - vehicle: Vehicle
+    - status: StatusEnum
+    - fare: Double
+    - transaction: Transaction
+    - startTime: DateTime
+    - endTime: DateTime
+    - distanceTravelled: Double
+    - isReturnedOnTime: Boolean
+    - tripRating: Rating
+    - tripStartLocation : DockingStation
+    - tripEndLocation : DockingStation
+
+    + getTrip(): Trip
+    + getUser(): User
+    + getVehicle(): Vehicle
+    + getStatus(): StatusEnum
+    + getFare(): Double
+    + getStartTime(): DateTime
+    + getEndTime(): DateTime
+    + getTransaction(): Transaction
+    + getDistanceTravelled(): Double
+    + getTripRating(): Rating
+    + getTripStartLocation(): DockingStation
+    + getTripEndLocation(): DockingStation
+    + getIsReturnedOnTime(): Boolean
+
+    + setTrip(trip: Trip): void
+    + setUser(user: User): void
+    + setVehicle(vehicle: Vehicle): void
+    + setStatus(status: StatusEnum): void
+    + setFare(fare: Double): void
+    + setTransaction(transaction: Transaction): void
+    + setStartTime(startTime: DateTime): void
+    + setEndTime(endTime: DateTime): void
+    + setDistanceTravelled(distanceTravelled: Double): void
+    + setTripRating(rating : Rating) : void
+    + setTripStartLocation(dockingStation : DockingStation) : void
+    + setTripEndLocation(dockingStation : DockingStation) : void
+    + setIsReturnedOnTime(isReturnedOnTime: Boolean): void
+
+    + calculateCost(): Double
+}
+
+interface Location{
+    + getCurrentLocation(): String
+}
+
+class Rating {
+    + id : String
+    - trip : Trip
+    - stars : int 
+    - feedback : String
+    
+    + getRatingID(): String
+    + getTrip(): String
+    + getStars(): int
+    + getFeedback(): String
+
+    + setRatingID(ratingID: String): void
+    + setTrip(trip: Trip): void
+    + setStars(stars: int): void
+    + setFeedback(feedback: String): void
+}   
+
+class SupportFeedback {
+    - id: String
+    - user: User
+    - tags: List<String>
+    - description: String
+    - {static} supportDocs: List<String>
+
+    + getTicketId(): String
+    + getUser(): User
+    + getTags(): List<String>
+    + getDescription(): String
+    + {static} getSupportDocs(): List<String>
+
+    + setTicketId(ticketId: String): void
+    + setUser(user: String): void
+    + setTags(tags: List<String>): void
+    + setDescription(description: String): void
+
+    + raiseTicket() : Boolean
+    + accessSupportDocs(): List<String>
+    + closeTicket() : Boolean
+    + submitFeedback() : Boolean
+}
+
+class Vehicle implements Location{
+    - id: String
+    - location: String
+    - qrCode: Image
+    - vehicleStatus: Enum('Docked','In Use')
+    - color: String
+    - tyrePressure: double
+
+    + getVehicleID(): String
+    + getLocation(): String
+    + getQrcode(): Image
+    + getVehicleStatus(): Enum('Docked','In Use')
+    + getColor(): String
+    + getTyrePressure(): Double
+
+    + setVehicleID(vehicleID: String): void
+    + setLocation(location: String): void
+    + setQrcode(qrCode: Image): void
+    + setVehicleStatus(vehicleStatus: Enum('Docked','In Use')): void
+    + setColor(color: String): void
+    + setTyrePressure(tyrePressure: double): void
+    
+    + reserveVehicle(): Boolean
+    + returnVehicle(): Boolean
+}
+
+class Bike extends Vehicle {
+    - fuelStatus: Double
+
+    + getFuelStatus(): Double
+    + setFuelStatus(fuelStatus: Double): void
+}
+
+class Bicycle extends Vehicle {
+    - basketCapacity: Double
+
+    + getBasketCapacity(): Double
+    + setBasketCapacity(basketCapacity: Double): void
+}
+
+class Moped extends Vehicle {
+    - batteryPercentage: Double
+
+    + getBatteryPercentage(): Double
+    + setBatteryPercentage(batteryPercentage: Double): void
+}
+
+class DockingStation implements Location{
+    - id: String
+    - stationName : String
+    - vehiclesDocked: List<Vehicle>
+    - capacity: Integer
+    - securityFeatures: List<String>
+    - maintenanceStatus: String
+    
+    + getStationId() : String
+    + getCapacity() : Integer
+    + getStationName() : String
+    + getVehiclesDocked() : List<Vehicle>
+    + getsecurityFeatures(): List<String>
+    + getMaintenanceStatus(): String
+
+    + setStationId() : String
+    + setCapacity() : Integer
+    + setStationName() : String
+    + setVehiclesDocked() : List<Vehicle>
+    + setsecurityFeatures(): List<String>
+    + setMaintenanceStatus(): String
+
+    + updateVehicleAvailability(): void
+    + updateMaintenanceStatus() : void
+    + logData() : void
+    + monitorSecurity(): void
+}
+
+class Wallet {
+    + id: String
+    - walletUser: User
+    - walletBalance: Double
+    - walletTransactions: List<Transaction>
+
+    + getWalletId(): String
+    + getWalletBalance(): Double
+    + getWalletTransactions(): List<Transaction>
+    + getWalletUser(): User
+
+    + setWalletId(walletId: String): void
+    + setWalletBalance(walletBalance: Double): void
+    + setWalletTransactions(walletTransactions: List<Transaction>): void
+    + setWalletUser(walletUser: User): void
+
+    + updateWallet(): Boolean
+    + addMoney(): Boolean
+    + deductMoney(): Boolean
+}
+
+class Transaction{
+    + id: String
+    - transactionDate: Date
+    - transactionAmount: double
+    - transactionType: String
+    - transactionStatus: String
+    - transactionRemarks: String
+    - transactionTrip: Trip
+
+    + getTransactionId(): String  
+    + getTransactionDate(): Date
+    + getTransactionAmount(): double
+    + getTransactionType(): String
+    + getTransactionStatus(): String
+    + getTransactionRemarks(): String
+    + getTransactionTrip(): Trip
+
+    + setTransactionId(transactionId: String): void
+    + setTransactionDate(transactionDate: Date): void
+    + setTransactionAmount(transactionAmount: double): void
+    + setTransactionType(transactionType: String): void
+    + setTransactionStatus(transactionStatus: String): void
+    + setTransactionRemarks(transactionRemarks: String): void
+    + setTransactionTrip(transactionTrip: Trip): void
+
+    + updateTransaction(): boolean
+    + deleteTransaction(): boolean
+    + makeTransaction(): boolean
+}
+
+class MobileApp{
+  + register(): void
+  + void startTrip(user : User, vehicle: Vehicle)
+  + void endTrip(trip : Trip, user : User)
+  + void rateTrip(trip : Trip, user : User)
+  + payWithWallet(user: User, vehicle: Vehicle, transaction : Transaction): void
+  + showDocumentations(): void
+  + viewHistory(user : User): void
+  + reportIssue(user : User, supportFeedback : SupportFeedback): void
+}
+
+
+User "1" *-- "0..*" Trip : Goes On >
+Trip "0..*" o-- "1" DockingStation : Starts At >
+Trip "0..*" o-- "1" DockingStation : Ends At >
+Vehicle "1" *-- "0..*" Trip : Used In >
+Trip "1" *-- "1" Transaction : Associated With 
+DockingStation "0..*" o-- "0..*" Vehicle : Contains >
+User "1" -- "1" Wallet : Owns >
+Trip "1" *-- "0..1" Rating : has > 
+User "1" -- "0..*" SupportFeedback : Raises >
+User "0..*" -- "0..*" Vehicle : Rides >
+User "0..*" -- "0..*" DockingStation : Visits >
+User "1" -- "0..*" Rating : Gives >
+
+MobileApp ..> User : uses
+MobileApp ..> Trip : uses
+MobileApp ..> Vehicle : uses
+MobileApp ..> SupportFeedback : uses
+MobileApp ..> Transaction : uses
+
+@enduml
